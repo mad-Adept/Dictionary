@@ -31,7 +31,7 @@ public class Controller {
 
 
         FileNameExtensionFilter filter = new FileNameExtensionFilter("Excel", "xls", "xlsx");
-        JFileChooser fileChooser = new JFileChooser("C:\\Users\\Anton_Nikonov\\Desktop");
+        JFileChooser fileChooser = new JFileChooser("C:\\Users\\Anton\\Desktop");
         fileChooser.setFileFilter(filter);
         int ret = fileChooser.showDialog(null, "Open file");
 
@@ -39,7 +39,7 @@ public class Controller {
             try {
                 System.out.println(new ExcelParser().wordsMap(fileChooser.getSelectedFile()));
             } catch (Exception e) {
-                errorReadfiles();
+                //errorReadfiles();
                 e.printStackTrace();
             }
 

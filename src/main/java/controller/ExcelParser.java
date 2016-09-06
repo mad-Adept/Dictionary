@@ -64,6 +64,8 @@ public class ExcelParser {
             while (iterRow.hasNext()){
 
                 HSSFRow row = (HSSFRow) iterRow.next();
+
+
                 if (checkCell(row.getCell(0)) && checkCell(row.getCell(1))) {
                     if (checkEnglishWord(row.getCell(0)))
                         localMapWordsXLS.put(row.getCell(0).toString(), row.getCell(1).toString());
@@ -77,6 +79,7 @@ public class ExcelParser {
             }
             return localMapWordsXLS;
         }
+
 
         private Map<String, String> parseXLSX(File fileXLSX){
 
@@ -123,7 +126,10 @@ public class ExcelParser {
         }
 
         private boolean checkCell(Cell cell){
-            if (cell.toString().matches("^[A-Za-zА-Яа-я]+$")) return true;
+
+            if (cell == null) return false;
+
+            if (cell.toString().matches("^[A-Za-zА-Яа-я,; ]+$")) return true;
             else return false;
         }
 
