@@ -1,23 +1,15 @@
 package controller;
 
-import javafx.application.Platform;
-import javafx.beans.value.ObservableValue;
-import javafx.scene.Cursor;
-import javafx.scene.control.*;
-import javafx.scene.effect.BlendMode;
-import javafx.scene.image.Image;
-import javafx.scene.image.ImageView;
-import javafx.scene.layout.GridPane;
-import org.apache.poi.hssf.usermodel.HSSFCell;
+
 import org.apache.poi.hssf.usermodel.HSSFRow;
 import org.apache.poi.hssf.usermodel.HSSFSheet;
 import org.apache.poi.hssf.usermodel.HSSFWorkbook;
 import org.apache.poi.ss.usermodel.*;
 import org.apache.poi.ss.usermodel.Cell;
-import org.apache.poi.xssf.usermodel.XSSFCell;
 import org.apache.poi.xssf.usermodel.XSSFRow;
 import org.apache.poi.xssf.usermodel.XSSFSheet;
 import org.apache.poi.xssf.usermodel.XSSFWorkbook;
+import utils.AlertWindow;
 
 import java.io.File;
 import java.io.FileInputStream;
@@ -29,16 +21,14 @@ import java.util.Map;
 
 public class ExcelParser {
 
-    private Map<String, String> mapWords;
-
+    AlertWindow aw = new AlertWindow();
 
 
     public Map<String, String> wordsMap(File file) {
 
-        if (getFileExtension(file).equals("xls")) mapWords = parseXLS(file);
-        else mapWords = parseXLSX(file);
+        if (getFileExtension(file).equals("xls")) return parseXLS(file);
+        else return parseXLSX(file);
 
-            return mapWords;
         }
 
 
@@ -59,12 +49,9 @@ public class ExcelParser {
 
             Iterator<Row> iterRow = myExcelSheet.rowIterator();
 
-            // = myExcelSheet.getRow(0);
-
             while (iterRow.hasNext()){
 
                 HSSFRow row = (HSSFRow) iterRow.next();
-
 
                 if (checkCell(row.getCell(0)) && checkCell(row.getCell(1))) {
                     if (checkEnglishWord(row.getCell(0)))
@@ -73,9 +60,10 @@ public class ExcelParser {
                     else if (checkEnglishWord(row.getCell(1)))
                         localMapWordsXLS.put(row.getCell(1).toString(), row.getCell(0).toString());
 
-                    else alertMessageRead();
+                    else aw.alertErrorFormat("Не верный формат записи слов в строке: " + row.getCell(0).toString()
+                        + " " + row.getCell(1).toString());
                 }
-                else alertMessageRead();
+                else aw.alertErrorReadRow(row.getRowNum() + 1);
             }
             return localMapWordsXLS;
         }
@@ -107,9 +95,10 @@ public class ExcelParser {
                     else if (checkEnglishWord(row.getCell(1)))
                         localMapWordsXLSX.put(row.getCell(1).toString(), row.getCell(0).toString());
 
-                    else alertMessageRead();
+                    else aw.alertErrorFormat("Не верный формат записи слов в строке: " + row.getCell(0).toString()
+                                + " " + row.getCell(1).toString());
                 }
-                else alertMessageRead();
+                else aw.alertErrorReadRow(row.getRowNum() + 1);
             }
             return localMapWordsXLSX;
         }
@@ -136,47 +125,6 @@ public class ExcelParser {
         private boolean checkEnglishWord(Cell cell){
         if (cell.toString().matches("^[A-Za-z]+$")) return true;
         else return false;
-        }
-
-        private void alertMessageRead(){
-
-            Alert alert = new Alert(Alert.AlertType.INFORMATION);
-            alert.setTitle("Alert Title");
-            alert.setHeaderText("Look, an Alert dialog");
-            alert.setContentText("errererh");
-
-            Platform.runLater(() ->
-            {
-                javafx.scene.control.Hyperlink detailsButton = (javafx.scene.control.Hyperlink) alert.getDialogPane().lookup( ".details-button" );
-
-                alert.getDialogPane().expandedProperty().addListener(
-                        (ObservableValue<? extends Boolean> observable, Boolean oldValue, Boolean newValue ) ->
-                        {
-                            detailsButton.setText( newValue ? "My less text" : "My more text" );
-                        });
-
-                // trigger listeners
-                alert.getDialogPane().setExpanded( true );
-                alert.getDialogPane().setExpanded( false );
-            });
-
-            Image image = new Image(getClass().getClassLoader().getResource("images/re.PNG").toString());
-            ImageView im = new ImageView(image);
-            im.setSmooth(true);
-            im.setBlendMode(BlendMode.DARKEN);
-            im.setCursor(Cursor.TEXT);
-/*        DropShadow dropShadow = new DropShadow();
-        dropShadow.setOffsetX(10);
-        dropShadow.setOffsetY(10);
-        im.setEffect(dropShadow);
-        im.setOpacity(0.5); */
-
-            GridPane gp = new GridPane();
-            gp.setMaxWidth(Double.MAX_VALUE);
-            gp.add(im, 0, 1);
-
-            alert.getDialogPane().setExpandableContent(gp);
-            alert.showAndWait();
         }
 
     }
