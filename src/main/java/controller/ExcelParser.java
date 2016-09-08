@@ -1,6 +1,9 @@
 package controller;
 
 
+import entity.Words;
+import javafx.collections.FXCollections;
+import javafx.collections.ObservableList;
 import org.apache.poi.hssf.usermodel.HSSFRow;
 import org.apache.poi.hssf.usermodel.HSSFSheet;
 import org.apache.poi.hssf.usermodel.HSSFWorkbook;
@@ -24,7 +27,7 @@ public class ExcelParser {
     AlertWindow aw = new AlertWindow();
 
 
-    public Map<String, String> wordsMap(File file) {
+    public ObservableList<Words> wordsMap(File file) {
 
         if (getFileExtension(file).equals("xls")) return parseXLS(file);
         else return parseXLSX(file);
@@ -33,9 +36,9 @@ public class ExcelParser {
 
 
 
-        private Map<String, String> parseXLS(File fileXLS){
+        private ObservableList<Words> parseXLS(File fileXLS){
 
-            Map<String, String> localMapWordsXLS = new HashMap<>();
+            ObservableList<Words> localListWordsXLS = FXCollections.observableArrayList();
 
             HSSFWorkbook myExcelBook = null;
 
@@ -55,23 +58,23 @@ public class ExcelParser {
 
                 if (checkCell(row.getCell(0)) && checkCell(row.getCell(1))) {
                     if (checkEnglishWord(row.getCell(0)))
-                        localMapWordsXLS.put(row.getCell(0).toString(), row.getCell(1).toString());
+                        localListWordsXLS.add(new Words(row.getCell(0).toString(), row.getCell(1).toString()));
 
                     else if (checkEnglishWord(row.getCell(1)))
-                        localMapWordsXLS.put(row.getCell(1).toString(), row.getCell(0).toString());
+                        localListWordsXLS.add(new Words(row.getCell(1).toString(), row.getCell(0).toString()));
 
                     else aw.alertErrorFormat("Не верный формат записи слов в строке: " + row.getCell(0).toString()
                         + " " + row.getCell(1).toString());
                 }
                 else aw.alertErrorReadRow(row.getRowNum() + 1);
             }
-            return localMapWordsXLS;
+            return localListWordsXLS;
         }
 
 
-        private Map<String, String> parseXLSX(File fileXLSX){
+        private ObservableList<Words> parseXLSX(File fileXLSX){
 
-            Map<String, String> localMapWordsXLSX = new HashMap<>();
+            ObservableList<Words> localListWordsXLSX = FXCollections.observableArrayList();
 
             XSSFWorkbook myExcelBook = null;
 
@@ -90,17 +93,17 @@ public class ExcelParser {
                 XSSFRow row = (XSSFRow) iterRow.next();
                 if (checkCell(row.getCell(0)) && checkCell(row.getCell(1))) {
                     if (checkEnglishWord(row.getCell(0)))
-                        localMapWordsXLSX.put(row.getCell(0).toString(), row.getCell(1).toString());
+                        localListWordsXLSX.add(new Words(row.getCell(0).toString(), row.getCell(1).toString()));
 
                     else if (checkEnglishWord(row.getCell(1)))
-                        localMapWordsXLSX.put(row.getCell(1).toString(), row.getCell(0).toString());
+                        localListWordsXLSX.add(new Words(row.getCell(1).toString(), row.getCell(0).toString()));
 
                     else aw.alertErrorFormat("Не верный формат записи слов в строке: " + row.getCell(0).toString()
                                 + " " + row.getCell(1).toString());
                 }
                 else aw.alertErrorReadRow(row.getRowNum() + 1);
             }
-            return localMapWordsXLSX;
+            return localListWordsXLSX;
         }
 
         private String getFileExtension(File file) {

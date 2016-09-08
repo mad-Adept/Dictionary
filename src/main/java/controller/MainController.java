@@ -1,6 +1,9 @@
 package controller;
 
 
+import entity.Words;
+import javafx.collections.FXCollections;
+import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.fxml.FXML;
@@ -11,6 +14,7 @@ import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
 
+import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
 import javafx.stage.WindowEvent;
@@ -23,15 +27,17 @@ import java.io.IOException;
 import java.util.*;
 
 
-public class Controller {
+public class MainController {
 
     final Random random = new Random();
-    static private TreeMap<String, String> wordsMap = new TreeMap<>();
+
+    static private ObservableList<Words> listWords = FXCollections.observableArrayList();
+
     private Stage editDialogStage;
     private Parent fxmlEdit;
     private FXMLLoader fxmlLoader = new FXMLLoader();
     private Stage mainStage;
-
+    private EditController editController;
 
     @FXML
     private Button fButton;
@@ -40,17 +46,29 @@ public class Controller {
     private Label labelMessage;
 
     @FXML
-    private void initialize() {
-        try {
+    private MenuItem editMenu;
 
+    @FXML
+    private TableView<Words> tableWords;
+
+    @FXML
+    private TableColumn<Words, String> enColumn;
+
+    @FXML
+    private TableColumn<Words, String> ruColumn;
+
+
+    @FXML
+    private void initialize() {
+
+        try {
         fxmlLoader.setLocation(getClass().getResource("/views/EditWindow.fxml"));
         fxmlEdit = fxmlLoader.load();
-
+        editController = fxmlLoader.getController();
 
         } catch (IOException e) {
             e.printStackTrace();
         }
-
     }
 
 
@@ -68,11 +86,11 @@ public class Controller {
 
         if (ret == JFileChooser.APPROVE_OPTION) {
             try {
-                wordsMap.putAll(new ExcelParser().wordsMap(fileChooser.getSelectedFile()));
-                System.out.println(wordsMap.firstKey());
-                System.out.println(wordsMap);
+                listWords.addAll(new ExcelParser().wordsMap(fileChooser.getSelectedFile()));
+                System.out.println(listWords.get(0));
+                System.out.println(listWords);
 
-                labelMessage.setText(wordsMap.firstKey());
+                //labelMessage.setText(wordsMap.firstKey());
 
             } catch (Exception e) {
                 new AlertWindow().alertErrorReadFiles();
@@ -96,6 +114,8 @@ public class Controller {
 
         editDialogStage.show();
 
+
+
         editDialogStage.setOnCloseRequest(new EventHandler<WindowEvent>() {
             @Override
             public void handle(WindowEvent event) {
@@ -108,7 +128,7 @@ public class Controller {
     public void secondButton(ActionEvent actionEvent) {
         System.out.println("Hello world 2!");
 
-        labelMessage.setText(randomValueMap(wordsMap));
+        //labelMessage.setText(randomValueMap(wordsMap));
 
     }
 
@@ -127,5 +147,8 @@ public class Controller {
 
     }
 
+    public ObservableList<Words> getListWords(){
+        return listWords;
+    }
 
 }

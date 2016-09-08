@@ -1,6 +1,6 @@
 package start;
 
-import controller.Controller;
+import controller.MainController;
 import javafx.application.Application;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
@@ -16,8 +16,8 @@ public class Main extends Application {
         FXMLLoader fxmlLoader = new FXMLLoader();
         fxmlLoader.setLocation(getClass().getClassLoader().getResource("views/MainWindow.fxml"));
         Parent fxmlMain = fxmlLoader.load();
-        Controller mainController = fxmlLoader.getController();
-        mainController.setMainStage(primaryStage);
+        MainController mainMainController = fxmlLoader.getController();
+        mainMainController.setMainStage(primaryStage);
 
         primaryStage.setTitle("English Dictionary");
         primaryStage.setMinHeight(320);

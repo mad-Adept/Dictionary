@@ -4,22 +4,25 @@
 <?import java.lang.*?>
 <?import javafx.scene.layout.*?>
 
-
-<VBox maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="378.0" prefWidth="421.0" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1">
+<VBox maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="348.0" prefWidth="421.0" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="controller.EditController">
     <children>
-        <AnchorPane prefHeight="407.0" prefWidth="600.0">
+        <AnchorPane prefHeight="379.0" prefWidth="421.0">
             <children>
-                <Button layoutX="248.0" layoutY="66.0" mnemonicParsing="false" prefHeight="25.0" prefWidth="120.0" text="Button2" AnchorPane.rightAnchor="53.0" />
-                <Button layoutX="55.0" layoutY="66.0" mnemonicParsing="false" prefHeight="25.0" prefWidth="120.0" text="Button1" AnchorPane.leftAnchor="55.0" />
-                <TableView layoutX="24.0" layoutY="120.0" prefHeight="227.0" prefWidth="376.0" AnchorPane.bottomAnchor="31.0" AnchorPane.leftAnchor="24.0" AnchorPane.rightAnchor="21.0" AnchorPane.topAnchor="120.0">
+                <TableView fx:id="tableWords" layoutX="23.0" layoutY="76.0" prefHeight="227.0" prefWidth="376.0" AnchorPane.bottomAnchor="75.0" AnchorPane.leftAnchor="23.0" AnchorPane.rightAnchor="22.0" AnchorPane.topAnchor="76.0">
                     <columns>
-                        <TableColumn prefWidth="185.0" text="C1" />
-                        <TableColumn prefWidth="185.0" text="C2" />
+                        <TableColumn fx:id="enColumn" prefWidth="178.0" text="English words" />
+                        <TableColumn fx:id="ruColumn" prefWidth="196.0" text="Russian words" />
                     </columns>
                     <columnResizePolicy>
                         <TableView fx:constant="CONSTRAINED_RESIZE_POLICY" />
                     </columnResizePolicy>
                 </TableView>
+            <TextField layoutX="23.0" layoutY="40.0" prefHeight="25.0" prefWidth="254.0" />
+            <TextField layoutX="23.0" layoutY="300.0" prefHeight="25.0" prefWidth="113.0" />
+            <TextField layoutX="149.0" layoutY="300.0" prefHeight="25.0" prefWidth="113.0" />
+            <Button fx:id="buttonSearch" layoutX="285.0" layoutY="40.0" mnemonicParsing="false" onAction="#searchWords" prefHeight="25.0" prefWidth="113.0" text="Search" />
+            <Button fx:id="buttonAdd" layoutX="277.0" layoutY="300.0" mnemonicParsing="false" onAction="#addWords" prefHeight="25.0" prefWidth="57.0" text="Add" />
+            <Button fx:id="buttonDelete" layoutX="348.0" layoutY="300.0" mnemonicParsing="false" onAction="#deleteWords" text="Delete" />
             </children>
         </AnchorPane>
     </children>
