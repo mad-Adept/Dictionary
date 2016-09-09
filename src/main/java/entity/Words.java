@@ -38,4 +38,12 @@ public class Words {
     public void setRuWord(String ruWord) {
         this.ruWord.set(ruWord);
     }
+
+    @Override
+    public String toString() {
+        return "Words{" +
+                "enWord=" + enWord +
+                ", ruWord=" + ruWord +
+                '}';
+    }
 }

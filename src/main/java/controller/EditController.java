@@ -2,19 +2,20 @@ package controller;
 
 
 import entity.Words;
+import javafx.animation.FadeTransition;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.fxml.FXML;
-import javafx.scene.control.Button;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
 import javafx.scene.control.cell.PropertyValueFactory;
-import javafx.scene.control.cell.TextFieldListCell;
 import javafx.scene.control.cell.TextFieldTableCell;
 import javafx.scene.text.Text;
 
 public class EditController {
+
+    private FadeTransition fadeOut;
 
     @FXML
     private TableView<Words> tableWords;
@@ -25,7 +26,6 @@ public class EditController {
     @FXML
     private TableColumn<Words, String> ruColumn;
 
-
     @FXML
     private void initialize() {
 
@@ -34,13 +34,25 @@ public class EditController {
 
         tableWords.setItems(getWordList());
 
+/*
+        fadeOut = new FadeTransition(Duration.seconds(3), attention);
+        fadeOut.setFromValue(0.0);
+        fadeOut.setToValue(1.0);
+        fadeOut.setCycleCount(-1);
+        fadeOut.setAutoReverse(true);
+        fadeOut.play();
+*/
+
         tableWords.setEditable(true);
 
         enColumn.setCellFactory(TextFieldTableCell.forTableColumn());
         enColumn.setOnEditCommit(new EventHandler<TableColumn.CellEditEvent<Words, String>>() {
             @Override
             public void handle(TableColumn.CellEditEvent<Words, String> event) {
-                (Words) event.getTableView().getItems().get(event.getTablePosition().getRow()
+                event.getTableView().getItems().get(
+                        event.getTablePosition().getRow()).setEnWord(event.getNewValue());
+
+                System.out.println(event.getTableView().getItems());
             }
         });
     }
@@ -58,6 +70,10 @@ public class EditController {
         }
 
         return list;
+    }
+
+    public FadeTransition getfadeOut(){
+        return fadeOut;
     }
 
     public void searchWords(ActionEvent actionEvent) {

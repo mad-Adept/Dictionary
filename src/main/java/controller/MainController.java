@@ -8,23 +8,26 @@ import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
-
+import javafx.geometry.Pos;
 import javafx.scene.Node;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
-
-import javafx.scene.control.cell.PropertyValueFactory;
+import javafx.scene.layout.AnchorPane;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
 import javafx.stage.WindowEvent;
+import javafx.util.Duration;
+import org.controlsfx.control.Notifications;
+import org.controlsfx.tools.Borders;
 import utils.AlertWindow;
-
 
 import javax.swing.*;
 import javax.swing.filechooser.FileNameExtensionFilter;
 import java.io.IOException;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Random;
+import java.util.TreeMap;
 
 
 public class MainController {
@@ -38,6 +41,12 @@ public class MainController {
     private FXMLLoader fxmlLoader = new FXMLLoader();
     private Stage mainStage;
     private EditController editController;
+
+
+
+
+    @FXML
+    private AnchorPane root;
 
     @FXML
     private Button fButton;
@@ -60,6 +69,12 @@ public class MainController {
 
     @FXML
     private void initialize() {
+
+        Node wrapButton = Borders.wrap(labelMessage).etchedBorder().buildAll();
+
+
+        //root.getChildren().add(wrapButton);
+
 
         try {
         fxmlLoader.setLocation(getClass().getResource("/views/EditWindow.fxml"));
@@ -87,8 +102,8 @@ public class MainController {
         if (ret == JFileChooser.APPROVE_OPTION) {
             try {
                 listWords.addAll(new ExcelParser().wordsMap(fileChooser.getSelectedFile()));
-                System.out.println(listWords.get(0));
-                System.out.println(listWords);
+                //System.out.println(listWords.get(0));
+                //System.out.println(listWords);
 
                 //labelMessage.setText(wordsMap.firstKey());
 
@@ -114,7 +129,13 @@ public class MainController {
 
         editDialogStage.show();
 
-
+        Notifications notifications = Notifications.create()
+                .title("Attention")
+                .text("Не забудьте нажать Enter после редактирования поля")
+                .graphic(null)
+                .hideAfter(Duration.seconds(5))
+                .position(Pos.TOP_RIGHT);
+        notifications.showConfirm();
 
         editDialogStage.setOnCloseRequest(new EventHandler<WindowEvent>() {
             @Override

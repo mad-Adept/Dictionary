@@ -7,6 +7,7 @@ import javafx.scene.Cursor;
 import javafx.scene.control.Alert;
 import javafx.scene.control.Label;
 import javafx.scene.effect.BlendMode;
+import javafx.scene.effect.ColorAdjust;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.GridPane;
@@ -61,6 +62,14 @@ public class AlertWindow {
         im.setSmooth(true);
         im.setBlendMode(BlendMode.DARKEN);
         im.setCursor(Cursor.TEXT);
+
+        final ColorAdjust effect=new ColorAdjust();
+        effect.setBrightness(0.3);
+        effect.setContrast(0.5);
+        effect.setHue(0.5);
+        effect.setSaturation(0.5);
+        im.setEffect(effect);
+
 /*        DropShadow dropShadow = new DropShadow();
         dropShadow.setOffsetX(10);
         dropShadow.setOffsetY(10);
@@ -68,6 +77,7 @@ public class AlertWindow {
         im.setOpacity(0.5); */
 
         Label lab = new Label("Не выерный формат записи в Excel файле. Нужно примерно так:");
+
 
         GridPane gp = new GridPane();
         gp.setMaxWidth(Double.MAX_VALUE);
