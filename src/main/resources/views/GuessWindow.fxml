@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import impl.org.controlsfx.skin.*?>
+<?import org.controlsfx.glyphfont.*?>
+<?import org.controlsfx.control.textfield.*?>
+<?import java.lang.*?>
+<?import java.util.*?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.paint.*?>
+<?import javafx.scene.text.*?>
+
+<VBox prefHeight="297.0" prefWidth="467.0" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="controller.GuessController">
+    <children>
+        <AnchorPane fx:id="root" VBox.vgrow="ALWAYS">
+            <children>
+                <Label fx:id="labelMessage" alignment="CENTER" layoutX="158.0" layoutY="81.0" style="&#10;" text="Press Start for begin!" textAlignment="CENTER" textFill="#9f9f9f" wrapText="false">
+                    <font>
+                        <Font size="18.0" />
+                    </font>
+                </Label>
+                <Button fx:id="buttonChoose2" layoutX="176.0" layoutY="196.0" mnemonicParsing="false" onAction="#choose2" prefHeight="17.0" prefWidth="129.0" AnchorPane.leftAnchor="176.0" AnchorPane.rightAnchor="162.0" />
+                <Button fx:id="buttonChoose1" defaultButton="true" layoutX="175.0" layoutY="155.0" mnemonicParsing="false" onAction="#choose1" AnchorPane.leftAnchor="175.0" AnchorPane.rightAnchor="163.0" />
+            <Button fx:id="buttonChoose3" layoutX="175.0" layoutY="238.0" mnemonicParsing="false" onAction="#choose3" prefHeight="31.0" prefWidth="129.0" />
+            </children>
+        </AnchorPane>
+    </children>
+</VBox>

@@ -20,8 +20,11 @@ public class Main extends Application {
         mainMainController.setMainStage(primaryStage);
 
         primaryStage.setTitle("English Dictionary");
+        //primaryStage.setResizable(false);
         primaryStage.setMinHeight(320);
         primaryStage.setMinWidth(420);
+        primaryStage.setMaxWidth(320);
+        primaryStage.setMaxHeight(380);
         primaryStage.setScene(new Scene(fxmlMain, 387, 279));
         primaryStage.show();
 

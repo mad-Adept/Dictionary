@@ -23,7 +23,6 @@
             <Button fx:id="buttonSearch" layoutX="285.0" layoutY="40.0" mnemonicParsing="false" onAction="#searchWords" prefHeight="25.0" prefWidth="113.0" text="Search" />
             <Button fx:id="buttonAdd" layoutX="277.0" layoutY="300.0" mnemonicParsing="false" onAction="#addWords" prefHeight="25.0" prefWidth="57.0" text="Add" />
             <Button fx:id="buttonDelete" layoutX="348.0" layoutY="300.0" mnemonicParsing="false" onAction="#deleteWords" text="Delete" />
-            <Label fx:id="attention" layoutX="69.0" layoutY="14.0" text="Не забудьте нажать Enter после редактирования поля" />
             </children>
         </AnchorPane>
     </children>

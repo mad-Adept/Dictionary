@@ -10,11 +10,11 @@
 <?import javafx.scene.paint.*?>
 <?import javafx.scene.text.*?>
 
-<VBox prefHeight="297.0" prefWidth="467.0" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="controller.MainController">
+<VBox maxHeight="600.0" maxWidth="800.0" minHeight="297.0" minWidth="467.0" prefHeight="297.0" prefWidth="467.0" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="controller.MainController">
     <children>
-        <AnchorPane fx:id="root" VBox.vgrow="ALWAYS">
+        <AnchorPane fx:id="root" prefHeight="303.0" prefWidth="461.0" VBox.vgrow="ALWAYS">
             <children>
-                <Label fx:id="labelMessage" alignment="CENTER" layoutX="156.0" layoutY="94.0" style="&#10;" text="Press Start for begin!" textAlignment="CENTER" textFill="#9f9f9f" wrapText="false">
+                <Label fx:id="labelMessage" alignment="CENTER" layoutX="157.0" layoutY="81.0" style="&#10;" text="Press Start for begin!" textAlignment="CENTER" textFill="#9f9f9f" wrapText="false">
                     <font>
                         <Font size="18.0" />
                     </font>
@@ -24,6 +24,7 @@
                         <Menu mnemonicParsing="false" text="Edit">
                             <items>
                                 <MenuItem fx:id="editMenu" mnemonicParsing="false" onAction="#menuEdit" text="Edit Dictionary" />
+                                <MenuItem mnemonicParsing="false" onAction="#IrregVerbs" text="Irregular Verbs" />
                             </items>
                         </Menu>
                         <Menu mnemonicParsing="false" text="Help">
@@ -33,9 +34,8 @@
                         </Menu>
                     </menus>
                 </MenuBar>
-                <CustomTextField layoutX="72.0" layoutY="169.0" prefHeight="25.0" prefWidth="253.0" AnchorPane.leftAnchor="72.0" AnchorPane.rightAnchor="62.0" />
-                <Button fx:id="fButton" layoutX="119.0" layoutY="232.0" mnemonicParsing="false" onAction="#firstButton" prefHeight="25.0" prefWidth="159.0" text="Button" AnchorPane.leftAnchor="119.0" AnchorPane.rightAnchor="109.0" />
-            <Button defaultButton="true" layoutX="173.0" layoutY="201.0" mnemonicParsing="false" onAction="#secondButton" text="Check" AnchorPane.leftAnchor="173.0" AnchorPane.rightAnchor="165.0" />
+                <Button fx:id="mainButton" layoutX="147.0" layoutY="252.0" mnemonicParsing="false" onAction="#mButton" prefHeight="31.0" prefWidth="174.0" text="Start!" AnchorPane.leftAnchor="147.0" AnchorPane.rightAnchor="146.0" />
+            <Button defaultButton="true" layoutX="169.0" layoutY="206.0" mnemonicParsing="false" onAction="#secondButton" text="Check" AnchorPane.leftAnchor="169.0" AnchorPane.rightAnchor="169.0" />
             </children>
         </AnchorPane>
     </children>

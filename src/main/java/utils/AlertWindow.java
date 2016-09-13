@@ -22,8 +22,10 @@ public class AlertWindow {
         alert.setHeaderText("Ошибка чтения Excel файла.");
         alert.setContentText("Сохраните документ в рассширении *.xlsx и " +
                         "запустите программу вновь.");
+        alert.setWidth(200);
+        alert.setHeight(200);
         alert.showAndWait();
-        //System.exit(0);
+        System.exit(0);
     }
 
     public void alertErrorFormat(String message) {
@@ -63,12 +65,6 @@ public class AlertWindow {
         im.setBlendMode(BlendMode.DARKEN);
         im.setCursor(Cursor.TEXT);
 
-        final ColorAdjust effect=new ColorAdjust();
-        effect.setBrightness(0.3);
-        effect.setContrast(0.5);
-        effect.setHue(0.5);
-        effect.setSaturation(0.5);
-        im.setEffect(effect);
 
 /*        DropShadow dropShadow = new DropShadow();
         dropShadow.setOffsetX(10);
