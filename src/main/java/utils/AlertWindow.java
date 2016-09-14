@@ -5,12 +5,15 @@ import javafx.application.Platform;
 import javafx.beans.value.ObservableValue;
 import javafx.scene.Cursor;
 import javafx.scene.control.Alert;
+import javafx.scene.control.ButtonType;
 import javafx.scene.control.Label;
 import javafx.scene.effect.BlendMode;
-import javafx.scene.effect.ColorAdjust;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.GridPane;
+
+import java.util.ArrayList;
+import java.util.Optional;
 
 public class AlertWindow {
 
@@ -26,6 +29,32 @@ public class AlertWindow {
         alert.setHeight(200);
         alert.showAndWait();
         System.exit(0);
+    }
+
+    public void alertFieldEmpty(){
+
+        Alert alert = new Alert(Alert.AlertType.INFORMATION);
+        alert.setTitle("Alert Title");
+        alert.setHeaderText(null);
+        alert.setContentText("Заполните поле для ввода слова.");
+        alert.setWidth(200);
+        alert.setHeight(200);
+        alert.showAndWait();
+    }
+
+    public Optional<ButtonType> alertListPassed(ArrayList<ButtonType> buttonList){
+
+        Alert alert = new Alert(Alert.AlertType.INFORMATION);
+        alert.setTitle("Alert Title");
+        alert.setHeaderText("Поздравляю!");
+        alert.setContentText("Лист слов успешно пройден, вы можете продолжить текущий или загрузить новый!");
+        alert.setWidth(200);
+        alert.setHeight(200);
+
+        alert.getButtonTypes().setAll(buttonList);
+
+        Optional<ButtonType> result = alert.showAndWait();
+        return result;
     }
 
     public void alertErrorFormat(String message) {

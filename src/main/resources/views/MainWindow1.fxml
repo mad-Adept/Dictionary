@@ -1,13 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<?import impl.org.controlsfx.skin.*?>
-<?import org.controlsfx.glyphfont.*?>
-<?import org.controlsfx.control.textfield.*?>
 <?import java.lang.*?>
-<?import java.util.*?>
 <?import javafx.scene.control.*?>
 <?import javafx.scene.layout.*?>
-<?import javafx.scene.paint.*?>
 <?import javafx.scene.text.*?>
 
 <VBox maxHeight="600.0" maxWidth="800.0" minHeight="297.0" minWidth="467.0" prefHeight="297.0" prefWidth="467.0" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="controller.MainController">
@@ -35,7 +30,7 @@
                     </menus>
                 </MenuBar>
                 <Button fx:id="mainButton" layoutX="147.0" layoutY="252.0" mnemonicParsing="false" onAction="#mButton" prefHeight="31.0" prefWidth="174.0" text="Start!" AnchorPane.leftAnchor="147.0" AnchorPane.rightAnchor="146.0" />
-            <Button defaultButton="true" layoutX="169.0" layoutY="206.0" mnemonicParsing="false" onAction="#secondButton" text="Check" AnchorPane.leftAnchor="169.0" AnchorPane.rightAnchor="169.0" />
+            <Button fx:id="dictionaryButton" defaultButton="true" layoutX="256.0" layoutY="206.0" minHeight="25.0" minWidth="65.0" mnemonicParsing="false" onAction="#dButton" prefHeight="25.0" prefWidth="65.0" text="EN--&gt;RU" AnchorPane.leftAnchor="256.0" AnchorPane.rightAnchor="146.0" />
             </children>
         </AnchorPane>
     </children>
