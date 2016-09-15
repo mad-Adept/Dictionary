@@ -39,10 +39,13 @@ public class MainController {
 
     private Stage editDialogStage;
     private Stage irregularVerbsDialogStage;
+    private Stage guessStage;
     private Parent fxmlEdit;
     private Parent fxmlIrregularVerbs;
+    private Parent fxmlGuess;
     private FXMLLoader fxmlLoaderEdit = new FXMLLoader();
     private FXMLLoader fxmlLoaderIrregularVerbs = new FXMLLoader();
+    private FXMLLoader fxmlLoaderGuess = new FXMLLoader();
     private Stage mainStage;
     private Words randomWords;
     private TextField inputWords;
@@ -50,39 +53,33 @@ public class MainController {
     private boolean emptyFlag;
     private boolean dictionaryTranslateFlag = true;
 
-
     @FXML
     private AnchorPane root;
-
     @FXML
     private Button mainButton;
-
     @FXML
     private Button dictionaryButton;
-
     @FXML
     private Label labelMessage;
-
     @FXML
     private MenuItem editMenu;
-
     @FXML
     private TableView<Words> tableWords;
-
     @FXML
     private TableColumn<Words, String> enColumn;
-
     @FXML
     private TableColumn<Words, String> ruColumn;
-
 
     @FXML
     private void initialize() {
 
         inputWords = TextFields.createClearableTextField();
         root.getChildren().addAll(inputWords);
-        inputWords.setLayoutX(120);
-        inputWords.setLayoutY(140);
+        inputWords.setPrefWidth(190);
+        inputWords.setLayoutX(105);
+        inputWords.setLayoutY(170);
+        AnchorPane.setRightAnchor(inputWords, 95d);
+        AnchorPane.setLeftAnchor(inputWords, 95d);
 
         if (mainButton.getText().equals("Start!")) dictionaryButton.setDisable(true);
 
@@ -91,6 +88,8 @@ public class MainController {
         fxmlEdit = fxmlLoaderEdit.load();
         fxmlLoaderIrregularVerbs.setLocation(getClass().getResource("/views/IrregularVerbs.fxml"));
         fxmlIrregularVerbs = fxmlLoaderIrregularVerbs.load();
+        fxmlLoaderGuess.setLocation(getClass().getResource("/views/GuessWindow.fxml"));
+        fxmlGuess = fxmlLoaderGuess.load();
 
         } catch (IOException e) {
             e.printStackTrace();
@@ -172,38 +171,30 @@ public class MainController {
         mainButton.fire();
     }
 
-    private boolean checkedWords(String inputWords, Words randomWord){
+    public void gButton(ActionEvent actionEvent) {
 
-        StringTokenizer st;
-
-        if (dictionaryButton.getText().equals("EN-->RU")) st = new StringTokenizer(randomWord.getRuWord(),",;");
-        else st = new StringTokenizer(randomWord.getEnWord(),",;");
-
-            while (st.hasMoreTokens()){
-                if (st.nextToken().toLowerCase().trim().equals(inputWords.toLowerCase().trim())) return true;
-            }
-        return false;
-    }
-
-
-    private void selectFile(){
-
-        FileNameExtensionFilter filter = new FileNameExtensionFilter("Excel", "xls", "xlsx");
-        JFileChooser fileChooser = new JFileChooser("C:\\Users\\Anton_Nikonov\\Desktop");
-        fileChooser.setFileFilter(filter);
-        int ret = fileChooser.showDialog(null, "Open file");
-
-        if (ret == JFileChooser.APPROVE_OPTION) {
-            try {
-                listWords.addAll(new ExcelParser().wordsMap(fileChooser.getSelectedFile()));
-
-            } catch (Exception e) {
-                new AlertWindow().alertErrorReadFiles();
-                e.printStackTrace();
-            }
+        if (guessStage==null) {
+            guessStage = new Stage();
+            guessStage.setTitle("Выбери правильный вариант");
+            guessStage.setMinHeight(150);
+            guessStage.setMinWidth(300);
+            guessStage.setScene(new Scene(fxmlGuess));
+           // guessStage.initModality(Modality.WINDOW_MODAL);
+            //guessStage.initOwner(mainStage);
         }
-    }
 
+        mainStage.hide();
+
+        guessStage.setOnCloseRequest(new EventHandler<WindowEvent>() {
+            @Override
+            public void handle(WindowEvent event) {
+                mainStage.show();
+            }
+        });
+
+        guessStage.show();
+
+    }
 
     public void menuEdit(ActionEvent actionEvent) {
 
@@ -236,19 +227,6 @@ public class MainController {
 
     }
 
-    private Words randomValueMap(ArrayList<Words> list) {
-
-        if (list != null && !list.isEmpty()) return list.get(random.nextInt(list.size()));
-        else {
-            alertWindow.alertErrorReadFiles();
-        }
-        return null;
-    }
-
-
-    public ObservableList<Words> getListWords(){
-        return listWords;
-    }
 
     public void IrregVerbs(ActionEvent actionEvent) {
 
@@ -264,6 +242,53 @@ public class MainController {
 
         irregularVerbsDialogStage.show();
     }
+
+    private boolean checkedWords(String inputWords, Words randomWord){
+
+        StringTokenizer st;
+
+        if (dictionaryButton.getText().equals("EN-->RU")) st = new StringTokenizer(randomWord.getRuWord(),",;");
+        else st = new StringTokenizer(randomWord.getEnWord(),",;");
+
+        while (st.hasMoreTokens()){
+            if (st.nextToken().toLowerCase().trim().equals(inputWords.toLowerCase().trim())) return true;
+        }
+        return false;
+    }
+
+
+    private void selectFile(){
+
+        FileNameExtensionFilter filter = new FileNameExtensionFilter("Excel", "xls", "xlsx");
+        JFileChooser fileChooser = new JFileChooser("C:\\Users\\Anton_Nikonov\\Desktop");
+        fileChooser.setFileFilter(filter);
+        int ret = fileChooser.showDialog(null, "Open file");
+
+        if (ret == JFileChooser.APPROVE_OPTION) {
+            try {
+                listWords.addAll(new ExcelParser().wordsMap(fileChooser.getSelectedFile()));
+
+            } catch (Exception e) {
+                new AlertWindow().alertErrorReadFiles();
+                e.printStackTrace();
+            }
+        }
+    }
+
+    private Words randomValueMap(ArrayList<Words> list) {
+
+        if (list != null && !list.isEmpty()) return list.get(random.nextInt(list.size()));
+        else {
+            alertWindow.alertErrorReadFiles();
+        }
+        return null;
+    }
+
+
+    public ObservableList<Words> getListWords(){
+        return listWords;
+    }
+
 }
 
 /*
