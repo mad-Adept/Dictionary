@@ -8,7 +8,7 @@ import javafx.scene.Scene;
 import javafx.stage.Stage;
 
 
-public class Main extends Application {
+public class Start extends Application {
 
     @Override
     public void start(Stage primaryStage) throws Exception{
@@ -25,7 +25,6 @@ public class Main extends Application {
         primaryStage.setMinHeight(370);
         primaryStage.setMaxWidth(800);
         primaryStage.setMaxHeight(400);
-
 
         primaryStage.setScene(new Scene(fxmlMain));
         primaryStage.show();

@@ -60,6 +60,8 @@ public class MainController {
     @FXML
     private Button dictionaryButton;
     @FXML
+    private Button guessButton;
+    @FXML
     private Label labelMessage;
     @FXML
     private MenuItem editMenu;
@@ -81,15 +83,16 @@ public class MainController {
         AnchorPane.setRightAnchor(inputWords, 95d);
         AnchorPane.setLeftAnchor(inputWords, 95d);
 
-        if (mainButton.getText().equals("Start!")) dictionaryButton.setDisable(true);
+        if (mainButton.getText().equals("Start!")){
+            dictionaryButton.setDisable(true);
+            guessButton.setDisable(true);
+        }
 
         try {
         fxmlLoaderEdit.setLocation(getClass().getResource("/views/EditWindow.fxml"));
         fxmlEdit = fxmlLoaderEdit.load();
         fxmlLoaderIrregularVerbs.setLocation(getClass().getResource("/views/IrregularVerbs.fxml"));
         fxmlIrregularVerbs = fxmlLoaderIrregularVerbs.load();
-        fxmlLoaderGuess.setLocation(getClass().getResource("/views/GuessWindow.fxml"));
-        fxmlGuess = fxmlLoaderGuess.load();
 
         } catch (IOException e) {
             e.printStackTrace();
@@ -116,27 +119,10 @@ public class MainController {
             selectFile();
             checkedList = new ArrayList<>(listWords);
             dictionaryButton.setDisable(false);
+            guessButton.setDisable(false);
         }
 
-        if (checkedList == null || checkedList.isEmpty()){
-
-            ButtonType buttonTypeOne = new ButtonType("Продолжить");
-            ButtonType buttonTypeTwo = new ButtonType("Загрузить");
-
-            ArrayList<ButtonType> buttonList = new ArrayList<ButtonType>(){{add(buttonTypeOne);add(buttonTypeTwo);}};
-            Optional<ButtonType> result = alertWindow.alertListPassed(buttonList);
-
-            if (result.get() == buttonTypeOne){
-
-                checkedList = new ArrayList<>(listWords);
-
-            } else if (result.get() == buttonTypeTwo) {
-
-                selectFile();
-                checkedList = new ArrayList<>(listWords);
-
-            }
-        }
+        checkChekedList();
 
         if (mainButton.getText().equals("Next") || mainButton.getText().equals("Start!")) {
             inputWords.clear();
@@ -171,29 +157,44 @@ public class MainController {
         mainButton.fire();
     }
 
-    public void gButton(ActionEvent actionEvent) {
+    public void gButton(ActionEvent actionEvent) throws IOException {
 
-        if (guessStage==null) {
-            guessStage = new Stage();
-            guessStage.setTitle("Выбери правильный вариант");
-            guessStage.setMinHeight(150);
-            guessStage.setMinWidth(300);
-            guessStage.setScene(new Scene(fxmlGuess));
-           // guessStage.initModality(Modality.WINDOW_MODAL);
-            //guessStage.initOwner(mainStage);
-        }
+        if (listWords.size() < 3) alertWindow.alertSizeList();
+        else {
 
-        mainStage.hide();
+            fxmlLoaderGuess.setLocation(getClass().getResource("/views/GuessWindow.fxml"));
+            fxmlGuess = fxmlLoaderGuess.load();
 
-        guessStage.setOnCloseRequest(new EventHandler<WindowEvent>() {
-            @Override
-            public void handle(WindowEvent event) {
-                mainStage.show();
+
+            if (guessStage == null) {
+                guessStage = new Stage();
+                guessStage.setTitle("Выбери правильный вариант");
+                guessStage.setMinHeight(150);
+                guessStage.setMinWidth(300);
+                guessStage.setScene(new Scene(fxmlGuess));
+                // guessStage.initModality(Modality.WINDOW_MODAL);
+                //guessStage.initOwner(mainStage);
             }
-        });
 
-        guessStage.show();
+            guessStage.show();
 
+            Notifications notifications = Notifications.create()
+                    .title("Attention")
+                    .text("Не забудьте нажать Enter после редактирования поля")
+                    .graphic(null)
+                    .hideAfter(Duration.seconds(5))
+                    .position(Pos.TOP_RIGHT);
+            notifications.showConfirm();
+
+            mainStage.hide();
+
+            guessStage.setOnCloseRequest(new EventHandler<WindowEvent>() {
+                @Override
+                public void handle(WindowEvent event) {
+                    mainStage.show();
+                }
+            });
+        }
     }
 
     public void menuEdit(ActionEvent actionEvent) {
@@ -257,7 +258,7 @@ public class MainController {
     }
 
 
-    private void selectFile(){
+    public void selectFile(){
 
         FileNameExtensionFilter filter = new FileNameExtensionFilter("Excel", "xls", "xlsx");
         JFileChooser fileChooser = new JFileChooser("C:\\Users\\Anton_Nikonov\\Desktop");
@@ -282,6 +283,29 @@ public class MainController {
             alertWindow.alertErrorReadFiles();
         }
         return null;
+    }
+
+    private void checkChekedList(){
+
+        if (checkedList == null || checkedList.isEmpty()){
+
+            ButtonType buttonTypeOne = new ButtonType("Продолжить");
+            ButtonType buttonTypeTwo = new ButtonType("Загрузить");
+
+            ArrayList<ButtonType> buttonList = new ArrayList<ButtonType>(){{add(buttonTypeOne);add(buttonTypeTwo);}};
+            Optional<ButtonType> result = alertWindow.alertListPassed(buttonList);
+
+            if (result.get() == buttonTypeOne){
+
+                checkedList = new ArrayList<>(listWords);
+
+            } else if (result.get() == buttonTypeTwo) {
+
+                selectFile();
+                checkedList = new ArrayList<>(listWords);
+
+            }
+        }
     }
 
 

@@ -31,7 +31,7 @@
                 </MenuBar>
                 <Button fx:id="mainButton" defaultButton="true" layoutX="115.0" layoutY="273.0" mnemonicParsing="false" onAction="#mButton" prefHeight="31.0" prefWidth="166.0" text="Start!" AnchorPane.leftAnchor="115.0" AnchorPane.rightAnchor="115.0" />
             <Button fx:id="dictionaryButton" defaultButton="true" layoutX="216.0" layoutY="231.0" minHeight="25.0" minWidth="65.0" mnemonicParsing="false" onAction="#dButton" prefHeight="25.0" prefWidth="65.0" text="EN--&gt;RU" AnchorPane.rightAnchor="115.0" />
-            <Button layoutX="115.0" layoutY="231.0" mnemonicParsing="false" onAction="#gButton" pickOnBounds="false" prefHeight="19.0" prefWidth="82.0" text="Guess Mode" textAlignment="CENTER" wrapText="true" AnchorPane.leftAnchor="115.0" AnchorPane.rightAnchor="200.0" />
+            <Button fx:id="guessButton" layoutX="115.0" layoutY="231.0" mnemonicParsing="false" onAction="#gButton" pickOnBounds="false" prefHeight="19.0" prefWidth="82.0" text="Guess Mode" textAlignment="CENTER" wrapText="true" AnchorPane.leftAnchor="115.0" AnchorPane.rightAnchor="200.0" />
             <Separator layoutX="58.0" layoutY="49.0" prefHeight="3.0" prefWidth="280.0" AnchorPane.leftAnchor="58.0" AnchorPane.rightAnchor="53.0" />
             <Separator layoutX="58.0" layoutY="126.0" prefHeight="3.0" prefWidth="280.0" AnchorPane.leftAnchor="58.0" AnchorPane.rightAnchor="53.0" />
             <Separator layoutX="58.0" layoutY="49.0" orientation="VERTICAL" prefHeight="78.0" prefWidth="6.0" AnchorPane.topAnchor="49.0" />

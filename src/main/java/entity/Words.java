@@ -46,4 +46,23 @@ public class Words {
                 ", ruWord=" + ruWord +
                 '}';
     }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+
+        Words words = (Words) o;
+
+        if (!enWord.equals(words.enWord)) return false;
+        return ruWord.equals(words.ruWord);
+
+    }
+
+    @Override
+    public int hashCode() {
+        int result = enWord.hashCode();
+        result = 31 * result + ruWord.hashCode();
+        return result;
+    }
 }

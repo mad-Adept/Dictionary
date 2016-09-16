@@ -24,11 +24,22 @@ public class AlertWindow {
         alert.setTitle("Alert Title");
         alert.setHeaderText("Ошибка чтения Excel файла.");
         alert.setContentText("Сохраните документ в рассширении *.xlsx и " +
-                        "запустите программу вновь.");
+                "запустите программу вновь.");
         alert.setWidth(200);
         alert.setHeight(200);
         alert.showAndWait();
         System.exit(0);
+    }
+
+    public void alertSizeList(){
+
+        Alert alert = new Alert(Alert.AlertType.ERROR);
+        alert.setTitle("Alert Title");
+        alert.setHeaderText("Ошибка чтения Excel файла.");
+        alert.setContentText("В текущем документе слишком мало слов для работы в режиме Угадывания!");
+        alert.setWidth(200);
+        alert.setHeight(200);
+        alert.showAndWait();
     }
 
     public void alertFieldEmpty(){
