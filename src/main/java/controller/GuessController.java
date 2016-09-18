@@ -1,6 +1,7 @@
 package controller;
 
 import entity.Words;
+import javafx.application.Platform;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
@@ -9,9 +10,7 @@ import javafx.scene.control.ButtonType;
 import javafx.scene.control.Label;
 import utils.AlertWindow;
 
-import java.util.ArrayList;
-import java.util.Optional;
-import java.util.Random;
+import java.util.*;
 
 public class GuessController {
 
@@ -24,6 +23,8 @@ public class GuessController {
     private Words word3 = new Words();
     private Words rightWord = new Words();
     private int randomValueForLabel;
+    private boolean flagPushButton = false;
+    private Timer timer = new java.util.Timer();
 
 
     @FXML
@@ -34,6 +35,8 @@ public class GuessController {
     private Button buttonChoose2;
     @FXML
     private Button buttonChoose3;
+    @FXML
+    private Button dictionaryButton;
 
 
     @FXML
@@ -42,6 +45,19 @@ public class GuessController {
         listWords = new MainController().getListWords();
         arreyListWords = new ArrayList<>(listWords);
         setTextButtonAndLabel();
+
+        timer.schedule(new TimerTask() {
+            public void run() {
+                Platform.runLater(new Runnable() {
+                    public void run() {
+                        if (flagPushButton){
+                            setTextButtonAndLabel();
+                            flagPushButton = false;
+                        }
+                    }
+                });
+            }
+        }, 0, 2000);
     }
 
     public void choose1(ActionEvent actionEvent) {
@@ -56,7 +72,8 @@ public class GuessController {
             labelMess.setText("False!");
             labelMess.setStyle("-fx-text-fill: red");
         }
-        setTextButtonAndLabel();
+
+        flagPushButton = true;
     }
 
     public void choose2(ActionEvent actionEvent) {
@@ -70,7 +87,8 @@ public class GuessController {
             labelMess.setText("False!");
             labelMess.setStyle("-fx-text-fill: red");
         }
-        setTextButtonAndLabel();
+
+        flagPushButton = true;
     }
 
     public void choose3(ActionEvent actionEvent) {
@@ -84,6 +102,14 @@ public class GuessController {
             labelMess.setText("False!");
             labelMess.setStyle("-fx-text-fill: red");
         }
+
+        flagPushButton = true;
+    }
+
+    public void dButton(ActionEvent actionEvent) {
+
+        if (dictionaryButton.getText().equals("EN-->RU")) dictionaryButton.setText("RU-->EN");
+        else dictionaryButton.setText("EN-->RU");
         setTextButtonAndLabel();
     }
 
@@ -98,23 +124,18 @@ public class GuessController {
 
     private void setTextButtonAndLabel(){
 
-        try {
-            Thread.sleep(2000);
-        } catch (InterruptedException e) {
-            e.printStackTrace();
-        }
-
         while (true) {
 
         word1 = randomValueMap(listWords);
-        buttonChoose1.setText(word1.getRuWord());
+
+        buttonChoose1.setText(dictionaryString(word1, false));
 
             while (true) {
 
                 word2 = randomValueMap(listWords);
-                if (word2.getRuWord().equals(buttonChoose1.getText())) continue;
+                if (dictionaryString(word2, false).equals(buttonChoose1.getText())) continue;
                 else {
-                    buttonChoose2.setText(word2.getRuWord());
+                    buttonChoose2.setText(dictionaryString(word2, false));
                     break;
                 }
             }
@@ -122,10 +143,10 @@ public class GuessController {
             while (true) {
 
                 word3 = randomValueMap(listWords);
-                if (word3.getRuWord().equals(buttonChoose1.getText())
-                        || word3.getRuWord().equals(buttonChoose2.getText())) continue;
+                if (dictionaryString(word3, false).equals(buttonChoose1.getText())
+                        || dictionaryString(word3, false).equals(buttonChoose2.getText())) continue;
                 else {
-                    buttonChoose3.setText(word3.getRuWord());
+                    buttonChoose3.setText(dictionaryString(word3, false));
                     break;
                 }
             }
@@ -148,15 +169,15 @@ public class GuessController {
 
         switch (randomValueForLabel){
 
-            case 0: labelMess.setText(word1.getEnWord());
+            case 0: labelMess.setText(dictionaryString(word1, true));
                 rightWord = word1;
                 break;
 
-            case 1: labelMess.setText(word2.getEnWord());
+            case 1: labelMess.setText(dictionaryString(word2, true));
                 rightWord = word2;
                 break;
 
-            case 2: labelMess.setText(word3.getEnWord());
+            case 2: labelMess.setText(dictionaryString(word3, true));
                 rightWord = word3;
                 break;
         }
@@ -164,8 +185,14 @@ public class GuessController {
 
     private boolean checkChoose(Button button){
 
-        if (rightWord.getRuWord().equals(button.getText())) return true;
-        else return false;
+        if (dictionaryButton.getText().equals("EN-->RU")) {
+            if (rightWord.getRuWord().equals(button.getText())) return true;
+        }
+        if (dictionaryButton.getText().equals("RU-->EN")){
+            if (rightWord.getEnWord().equals(button.getText())) return true;
+        }
+
+        return false;
     }
 
     private boolean checkValueList(Words word) {
@@ -198,7 +225,19 @@ public class GuessController {
 
             }
         }
-
     }
 
+    private String dictionaryString(Words words, boolean reverse){
+       if (reverse) {
+           if (dictionaryButton.getText().equals("EN-->RU")) return words.getEnWord();
+           else return words.getRuWord();
+       } else {
+           if (dictionaryButton.getText().equals("EN-->RU")) return words.getRuWord();
+           else return words.getEnWord();
+       }
+    }
+
+    public Timer getTimer(){
+        return timer;
+    }
 }

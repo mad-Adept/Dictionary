@@ -16,6 +16,7 @@ import javafx.scene.text.Text;
 public class EditController {
 
     private FadeTransition fadeOut;
+    private ObservableList<Words> list;
 
     @FXML
     private TableView<Words> tableWords;
@@ -55,13 +56,22 @@ public class EditController {
                 System.out.println(event.getTableView().getItems());
             }
         });
+
+        ruColumn.setCellFactory(TextFieldTableCell.forTableColumn());
+        ruColumn.setOnEditCommit(new EventHandler<TableColumn.CellEditEvent<Words, String>>() {
+            @Override
+            public void handle(TableColumn.CellEditEvent<Words, String> event) {
+                event.getTableView().getItems().get(
+                        event.getTablePosition().getRow()).setRuWord(event.getNewValue());
+
+                System.out.println(event.getTableView().getItems());
+            }
+        });
     }
 
 
 
     private ObservableList<Words> getWordList(){
-
-        ObservableList<Words> list;
 
         list = new MainController().getListWords();
 
@@ -81,6 +91,8 @@ public class EditController {
     }
 
     public void addWords(ActionEvent actionEvent) {
+
+        //list.add();
 
     }
 

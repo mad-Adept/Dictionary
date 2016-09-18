@@ -24,7 +24,7 @@ import java.util.Map;
 
 public class ExcelParser {
 
-    AlertWindow aw = new AlertWindow();
+    private AlertWindow aw = new AlertWindow();
 
 
     public ObservableList<Words> wordsMap(File file) {

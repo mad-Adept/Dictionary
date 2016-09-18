@@ -191,6 +191,7 @@ public class MainController {
             guessStage.setOnCloseRequest(new EventHandler<WindowEvent>() {
                 @Override
                 public void handle(WindowEvent event) {
+                    new GuessController().getTimer().cancel();
                     mainStage.show();
                 }
             });
