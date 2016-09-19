@@ -7,8 +7,8 @@ import javafx.collections.ObservableList;
 import org.apache.poi.hssf.usermodel.HSSFRow;
 import org.apache.poi.hssf.usermodel.HSSFSheet;
 import org.apache.poi.hssf.usermodel.HSSFWorkbook;
-import org.apache.poi.ss.usermodel.*;
 import org.apache.poi.ss.usermodel.Cell;
+import org.apache.poi.ss.usermodel.Row;
 import org.apache.poi.xssf.usermodel.XSSFRow;
 import org.apache.poi.xssf.usermodel.XSSFSheet;
 import org.apache.poi.xssf.usermodel.XSSFWorkbook;
@@ -17,9 +17,7 @@ import utils.AlertWindow;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
-import java.util.HashMap;
 import java.util.Iterator;
-import java.util.Map;
 
 
 public class ExcelParser {
@@ -126,7 +124,7 @@ public class ExcelParser {
         }
 
         private boolean checkEnglishWord(Cell cell){
-        if (cell.toString().matches("^[A-Za-z]+$")) return true;
+        if (cell.toString().matches("^[A-Za-z,; ]+$")) return true;
         else return false;
         }
 

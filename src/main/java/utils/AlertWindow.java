@@ -53,6 +53,17 @@ public class AlertWindow {
         alert.showAndWait();
     }
 
+    public void alertFieldAdd(){
+
+        Alert alert = new Alert(Alert.AlertType.ERROR);
+        alert.setTitle("Alert Title");
+        alert.setHeaderText(null);
+        alert.setContentText("Не верно заполнено поля для добавления словосочетания!");
+        alert.setWidth(200);
+        alert.setHeight(200);
+        alert.showAndWait();
+    }
+
     public Optional<ButtonType> alertListPassed(ArrayList<ButtonType> buttonList){
 
         Alert alert = new Alert(Alert.AlertType.INFORMATION);
