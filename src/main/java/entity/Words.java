@@ -41,10 +41,7 @@ public class Words {
 
     @Override
     public String toString() {
-        return "Words{" +
-                "enWord=" + enWord +
-                ", ruWord=" + ruWord +
-                '}';
+        return enWord.getValue() + " = " + ruWord.getValue();
     }
 
     @Override

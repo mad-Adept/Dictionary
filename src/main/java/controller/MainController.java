@@ -89,8 +89,7 @@ public class MainController {
         }
 
         try {
-        fxmlLoaderEdit.setLocation(getClass().getResource("/views/EditWindow.fxml"));
-        fxmlEdit = fxmlLoaderEdit.load();
+
         fxmlLoaderIrregularVerbs.setLocation(getClass().getResource("/views/IrregularVerbs.fxml"));
         fxmlIrregularVerbs = fxmlLoaderIrregularVerbs.load();
 
@@ -198,7 +197,10 @@ public class MainController {
         }
     }
 
-    public void menuEdit(ActionEvent actionEvent) {
+    public void menuEdit(ActionEvent actionEvent) throws IOException {
+
+        fxmlLoaderEdit.setLocation(getClass().getResource("/views/EditWindow.fxml"));
+        fxmlEdit = fxmlLoaderEdit.load();
 
         if (editDialogStage==null) {
             editDialogStage = new Stage();

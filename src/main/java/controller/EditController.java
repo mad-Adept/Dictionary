@@ -12,27 +12,31 @@ import javafx.scene.control.TableView;
 import javafx.scene.control.TextField;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.control.cell.TextFieldTableCell;
+import javafx.scene.layout.AnchorPane;
 import javafx.scene.text.Text;
+import org.controlsfx.control.textfield.TextFields;
 import utils.AlertWindow;
+
+import java.util.ArrayList;
 
 public class EditController {
 
-    private FadeTransition fadeOut;
     private ObservableList<Words> list;
     private AlertWindow alertWindow = new AlertWindow();
+    private Words selectedWords;
+    private TextField inputSearch;
+    private ArrayList<Words> saveList;
 
+    @FXML
+    private AnchorPane rootEdit;
     @FXML
     private TableView<Words> tableWords;
-
     @FXML
     private TableColumn<Words, String> enColumn;
-
     @FXML
     private TableColumn<Words, String> ruColumn;
-
     @FXML
     private TextField textField1;
-
     @FXML
     private TextField textField2;
 
@@ -44,14 +48,15 @@ public class EditController {
 
         tableWords.setItems(getWordList());
 
-/*
-        fadeOut = new FadeTransition(Duration.seconds(3), attention);
-        fadeOut.setFromValue(0.0);
-        fadeOut.setToValue(1.0);
-        fadeOut.setCycleCount(-1);
-        fadeOut.setAutoReverse(true);
-        fadeOut.play();
-*/
+        inputSearch = TextFields.createClearableTextField();
+        rootEdit.getChildren().addAll(inputSearch);
+        inputSearch.setPrefWidth(250);
+        inputSearch.setLayoutX(22);
+        inputSearch.setLayoutY(40);
+        AnchorPane.setRightAnchor(inputSearch, 150d);
+        AnchorPane.setLeftAnchor(inputSearch, 22d);
+
+        TextFields.bindAutoCompletion(inputSearch, list);
 
         tableWords.setEditable(true);
 
@@ -91,12 +96,17 @@ public class EditController {
         return list;
     }
 
-    public FadeTransition getfadeOut(){
-        return fadeOut;
-    }
-
     public void searchWords(ActionEvent actionEvent) {
 
+        if (!inputSearch.getText().trim().equals("")){
+
+            saveList = new ArrayList<>(list);
+            list.clear();
+            list.addAll(searchCollacations(inputSearch.getText()));
+        } else {
+
+            if (saveList != null && !saveList.isEmpty()) list.addAll(saveList);
+        }
     }
 
     public void addWords(ActionEvent actionEvent) {
@@ -118,6 +128,14 @@ public class EditController {
 
     public void deleteWords(ActionEvent actionEvent) {
 
+        selectedWords = (Words) tableWords.getSelectionModel().getSelectedItem();
+
+        if (selectedWords != null){
+
+            list.remove(selectedWords);
+        }
+        else alertWindow.alertErrorDelete();
+
     }
 
     private boolean checkCorrectWords(String words){
@@ -135,4 +153,30 @@ public class EditController {
         if (word.matches("^[A-Za-z,; ]+$")) return true;
         else return false;
     }
+
+    private ArrayList<Words> searchCollacations(String collacation){
+
+        ArrayList<Words> returnList = new ArrayList<>();
+
+        for (Words iterWords : saveList){
+
+            System.out.println(iterWords.getEnWord().trim());
+            System.out.println(collacation.trim().split("=")[0]);
+
+            if (iterWords.toString().trim().equals(collacation.trim().split("=")[0])){
+                returnList.add(iterWords);
+            }
+        }
+        return returnList;
+    }
 }
+
+
+/*
+        fadeOut = new FadeTransition(Duration.seconds(3), attention);
+        fadeOut.setFromValue(0.0);
+        fadeOut.setToValue(1.0);
+        fadeOut.setCycleCount(-1);
+        fadeOut.setAutoReverse(true);
+        fadeOut.play();
+*/

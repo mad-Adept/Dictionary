@@ -53,6 +53,17 @@ public class AlertWindow {
         alert.showAndWait();
     }
 
+    public void alertErrorDelete(){
+
+        Alert alert = new Alert(Alert.AlertType.ERROR);
+        alert.setTitle("Alert Title");
+        alert.setHeaderText(null);
+        alert.setContentText("Не выберано нужное для удаления словосочетание!");
+        alert.setWidth(200);
+        alert.setHeight(200);
+        alert.showAndWait();
+    }
+
     public void alertFieldAdd(){
 
         Alert alert = new Alert(Alert.AlertType.ERROR);
