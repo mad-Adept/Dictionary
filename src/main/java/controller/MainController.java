@@ -19,6 +19,7 @@ import javafx.util.Duration;
 import org.controlsfx.control.Notifications;
 import org.controlsfx.control.textfield.TextFields;
 import utils.AlertWindow;
+import utils.ExcelParser;
 
 import javax.swing.*;
 import javax.swing.filechooser.FileNameExtensionFilter;
@@ -356,9 +357,7 @@ public class MainController {
 
         for (int i = 0; i < comparList.size(); i++){
 
-
-
-            if (!listWords.get(i).getEnWord().equals(comparList.get(i).getEnWord()) &&
+            if (!listWords.get(i).getEnWord().equals(comparList.get(i).getEnWord()) ||
                     !listWords.get(i).getRuWord().equals(comparList.get(i).getRuWord())){
                 return false;
             }
