@@ -2,11 +2,11 @@ package controller;
 
 
 import entity.Words;
-import javafx.animation.FadeTransition;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.fxml.FXML;
+import javafx.geometry.Pos;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
 import javafx.scene.control.TextField;
@@ -14,6 +14,8 @@ import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.control.cell.TextFieldTableCell;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.text.Text;
+import javafx.util.Duration;
+import org.controlsfx.control.Notifications;
 import org.controlsfx.control.textfield.TextFields;
 import utils.AlertWindow;
 
@@ -26,6 +28,7 @@ public class EditController {
     private Words selectedWords;
     private TextField inputSearch;
     private ArrayList<Words> saveList;
+    private ArrayList<Words> searchList;
 
     @FXML
     private AnchorPane rootEdit;
@@ -67,7 +70,7 @@ public class EditController {
                 event.getTableView().getItems().get(
                         event.getTablePosition().getRow()).setEnWord(event.getNewValue());
 
-                System.out.println(event.getTableView().getItems());
+                saveList = new ArrayList<>(list);
             }
         });
 
@@ -78,9 +81,11 @@ public class EditController {
                 event.getTableView().getItems().get(
                         event.getTablePosition().getRow()).setRuWord(event.getNewValue());
 
-                System.out.println(event.getTableView().getItems());
+                saveList = new ArrayList<>(list);
             }
         });
+
+        saveList = new ArrayList<>(list);
     }
 
 
@@ -100,11 +105,21 @@ public class EditController {
 
         if (!inputSearch.getText().trim().equals("")){
 
-            saveList = new ArrayList<>(list);
             list.clear();
-            list.addAll(searchCollacations(inputSearch.getText()));
+            searchList = searchCollacations(inputSearch.getText());
+            if (!searchList.isEmpty()) list.addAll(searchList);
+            else tableWords.setPlaceholder(new Text("Net contenta"));
+
+            Notifications notifications = Notifications.create()
+                    .title("Attention")
+                    .text("Что бы вернуть полный список нажмите кнопку ПОиска с пустым полем.")
+                    .graphic(null)
+                    .hideAfter(Duration.seconds(5))
+                    .position(Pos.TOP_RIGHT);
+            notifications.showConfirm();
         } else {
 
+            list.clear();
             if (saveList != null && !saveList.isEmpty()) list.addAll(saveList);
         }
     }
@@ -124,6 +139,7 @@ public class EditController {
         }
         else alertWindow.alertFieldAdd();
 
+        saveList = new ArrayList<>(list);
     }
 
     public void deleteWords(ActionEvent actionEvent) {
@@ -136,6 +152,7 @@ public class EditController {
         }
         else alertWindow.alertErrorDelete();
 
+        saveList = new ArrayList<>(list);
     }
 
     private boolean checkCorrectWords(String words){
@@ -160,10 +177,7 @@ public class EditController {
 
         for (Words iterWords : saveList){
 
-            System.out.println(iterWords.getEnWord().trim());
-            System.out.println(collacation.trim().split("=")[0]);
-
-            if (iterWords.toString().trim().equals(collacation.trim().split("=")[0])){
+            if (iterWords.toString().trim().contains(collacation.trim())){
                 returnList.add(iterWords);
             }
         }

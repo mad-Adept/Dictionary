@@ -16,6 +16,7 @@ import utils.AlertWindow;
 
 import java.io.File;
 import java.io.FileInputStream;
+import java.io.FileOutputStream;
 import java.io.IOException;
 import java.util.Iterator;
 
@@ -27,11 +28,52 @@ public class ExcelParser {
 
     public ObservableList<Words> wordsMap(File file) {
 
-        if (getFileExtension(file).equals("xls")) return parseXLS(file);
+        if (getFileExtension(file.getName()).equals("xls")) return parseXLS(file);
         else return parseXLSX(file);
 
         }
 
+
+    public void saveInExcel(File file, ObservableList<Words> listWords) throws IOException {
+
+
+        if (getFileExtension(file.getName()).equals("xls")) {
+
+            HSSFWorkbook book = new HSSFWorkbook();
+            HSSFSheet sheet = book.createSheet();
+
+            for (int iter = 0; iter < listWords.size(); iter++) {
+
+                HSSFRow row = sheet.createRow(iter);
+
+                row.createCell(0).setCellValue(listWords.get(iter).getEnWord());
+                row.createCell(1).setCellValue(listWords.get(iter).getRuWord());
+            }
+
+            sheet.autoSizeColumn(1);
+            // Записываем всё в файл
+            book.write(new FileOutputStream(file));
+            book.close();
+        } else {
+
+            XSSFWorkbook book = new XSSFWorkbook();
+            XSSFSheet sheet = book.createSheet();
+
+            for (int iter = 0; iter < listWords.size(); iter++) {
+
+                XSSFRow row = sheet.createRow(iter);
+
+                row.createCell(0).setCellValue(listWords.get(iter).getEnWord());
+                row.createCell(1).setCellValue(listWords.get(iter).getRuWord());
+            }
+
+            sheet.autoSizeColumn(1);
+            // Записываем всё в файл
+            book.write(new FileOutputStream(file));
+            book.close();
+
+        }
+    }
 
 
         private ObservableList<Words> parseXLS(File fileXLS){
@@ -104,9 +146,8 @@ public class ExcelParser {
             return localListWordsXLSX;
         }
 
-        private String getFileExtension(File file) {
+        private String getFileExtension(String fileName) {
 
-            String fileName = file.getName();
             // если в имени файла есть точка и она не является первым символом в названии файла
             if(fileName.lastIndexOf(".") != -1 && fileName.lastIndexOf(".") != 0)
                 // то вырезаем все знаки после последней точки в названии файла, то есть ХХХХХ.txt -> txt

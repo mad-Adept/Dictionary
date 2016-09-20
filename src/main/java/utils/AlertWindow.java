@@ -11,6 +11,7 @@ import javafx.scene.effect.BlendMode;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.GridPane;
+import javafx.stage.Modality;
 
 import java.util.ArrayList;
 import java.util.Optional;
@@ -75,12 +76,39 @@ public class AlertWindow {
         alert.showAndWait();
     }
 
+    public void alertErrorWriteToExcel(){
+
+        Alert alert = new Alert(Alert.AlertType.ERROR);
+        alert.setTitle("Alert Title");
+        alert.setHeaderText(null);
+        alert.setContentText("Ошибка записи в файл Excel!");
+        alert.setWidth(200);
+        alert.setHeight(200);
+        alert.showAndWait();
+    }
+
     public Optional<ButtonType> alertListPassed(ArrayList<ButtonType> buttonList){
 
         Alert alert = new Alert(Alert.AlertType.INFORMATION);
         alert.setTitle("Alert Title");
         alert.setHeaderText("Поздравляю!");
         alert.setContentText("Лист слов успешно пройден, вы можете продолжить текущий или загрузить новый!");
+        alert.setWidth(200);
+        alert.setHeight(200);
+
+        alert.getButtonTypes().setAll(buttonList);
+
+        Optional<ButtonType> result = alert.showAndWait();
+        return result;
+    }
+
+    public Optional<ButtonType> alertSaveEdit(ArrayList<ButtonType> buttonList, String message){
+
+        Alert alert = new Alert(Alert.AlertType.INFORMATION);
+        alert.initModality(Modality.WINDOW_MODAL);
+        alert.setTitle("Alert Title");
+        alert.setHeaderText(null);
+        alert.setContentText(message);
         alert.setWidth(200);
         alert.setHeight(200);
 

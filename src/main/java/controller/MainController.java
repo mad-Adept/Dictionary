@@ -13,7 +13,6 @@ import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.scene.layout.AnchorPane;
-import javafx.stage.Modality;
 import javafx.stage.Stage;
 import javafx.stage.WindowEvent;
 import javafx.util.Duration;
@@ -23,6 +22,7 @@ import utils.AlertWindow;
 
 import javax.swing.*;
 import javax.swing.filechooser.FileNameExtensionFilter;
+import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Optional;
@@ -32,6 +32,7 @@ import java.util.StringTokenizer;
 
 public class MainController {
 
+    private File fileChoose;
     final Random random = new Random();
 
     static private ObservableList<Words> listWords = FXCollections.observableArrayList();
@@ -52,6 +53,7 @@ public class MainController {
     private AlertWindow alertWindow = new AlertWindow();
     private boolean emptyFlag;
     private boolean dictionaryTranslateFlag = true;
+    private ArrayList<Words> checkEditList;
 
     @FXML
     private AnchorPane root;
@@ -87,15 +89,6 @@ public class MainController {
             dictionaryButton.setDisable(true);
             guessButton.setDisable(true);
         }
-
-        try {
-
-        fxmlLoaderIrregularVerbs.setLocation(getClass().getResource("/views/IrregularVerbs.fxml"));
-        fxmlIrregularVerbs = fxmlLoaderIrregularVerbs.load();
-
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
     }
 
 
@@ -116,7 +109,7 @@ public class MainController {
 
         if (mainButton.getText().equals("Start!")){
             selectFile();
-            checkedList = new ArrayList<>(listWords);
+            checkedList = getEntityFromObservList();
             dictionaryButton.setDisable(false);
             guessButton.setDisable(false);
         }
@@ -161,9 +154,10 @@ public class MainController {
         if (listWords.size() < 3) alertWindow.alertSizeList();
         else {
 
-            fxmlLoaderGuess.setLocation(getClass().getResource("/views/GuessWindow.fxml"));
-            fxmlGuess = fxmlLoaderGuess.load();
-
+            if (fxmlGuess == null) {
+                fxmlLoaderGuess.setLocation(getClass().getResource("/views/GuessWindow.fxml"));
+                fxmlGuess = fxmlLoaderGuess.load();
+            }
 
             if (guessStage == null) {
                 guessStage = new Stage();
@@ -199,40 +193,54 @@ public class MainController {
 
     public void menuEdit(ActionEvent actionEvent) throws IOException {
 
-        fxmlLoaderEdit.setLocation(getClass().getResource("/views/EditWindow.fxml"));
-        fxmlEdit = fxmlLoaderEdit.load();
+        checkEditList = getEntityFromObservList();
 
-        if (editDialogStage==null) {
-            editDialogStage = new Stage();
-            editDialogStage.setTitle("Редактирование записи");
-            editDialogStage.setMinHeight(150);
-            editDialogStage.setMinWidth(300);
-            editDialogStage.setScene(new Scene(fxmlEdit));
-            editDialogStage.initModality(Modality.WINDOW_MODAL);
-            editDialogStage.initOwner(mainStage);
+        if (fxmlEdit == null) {
+            fxmlLoaderEdit.setLocation(getClass().getResource("/views/EditWindow.fxml"));
+            fxmlEdit = fxmlLoaderEdit.load();
         }
 
-        editDialogStage.show();
-
-        Notifications notifications = Notifications.create()
-                .title("Attention")
-                .text("Не забудьте нажать Enter после редактирования поля")
-                .graphic(null)
-                .hideAfter(Duration.seconds(5))
-                .position(Pos.TOP_RIGHT);
-        notifications.showConfirm();
-
-        editDialogStage.setOnCloseRequest(new EventHandler<WindowEvent>() {
-            @Override
-            public void handle(WindowEvent event) {
-                System.out.println("Okno zakrito!");
+            if (editDialogStage == null) {
+                editDialogStage = new Stage();
+                editDialogStage.setTitle("Редактирование записи");
+                editDialogStage.setMinHeight(150);
+                editDialogStage.setMinWidth(300);
+                editDialogStage.setScene(new Scene(fxmlEdit));
+                //editDialogStage.initModality(Modality.WINDOW_MODAL);
+                //editDialogStage.initOwner(mainStage);
             }
-        });
 
+            editDialogStage.show();
+
+            Notifications notifications = Notifications.create()
+                    .title("Attention")
+                    .text("Не забудьте нажать Enter после редактирования поля таблицы!")
+                    .graphic(null)
+                    .hideAfter(Duration.seconds(5))
+                    .position(Pos.TOP_RIGHT);
+            notifications.showConfirm();
+
+            mainStage.hide();
+
+            editDialogStage.setOnCloseRequest(new EventHandler<WindowEvent>() {
+                @Override
+                public void handle(WindowEvent event) {
+
+                    if (!equalsLists(checkEditList)){
+                        checkSaveListToFile();
+                    }
+                    mainStage.show();
+                }
+            });
     }
 
 
-    public void IrregVerbs(ActionEvent actionEvent) {
+    public void IrregVerbs(ActionEvent actionEvent) throws IOException {
+
+        if (fxmlIrregularVerbs == null) {
+            fxmlLoaderIrregularVerbs.setLocation(getClass().getResource("/views/IrregularVerbs.fxml"));
+            fxmlIrregularVerbs = fxmlLoaderIrregularVerbs.load();
+        }
 
         if (irregularVerbsDialogStage==null) {
             irregularVerbsDialogStage = new Stage();
@@ -271,6 +279,8 @@ public class MainController {
         if (ret == JFileChooser.APPROVE_OPTION) {
             try {
                 listWords.addAll(new ExcelParser().wordsMap(fileChooser.getSelectedFile()));
+                fileChoose = fileChooser.getSelectedFile();
+
 
             } catch (Exception e) {
                 new AlertWindow().alertErrorReadFiles();
@@ -300,15 +310,60 @@ public class MainController {
 
             if (result.get() == buttonTypeOne){
 
-                checkedList = new ArrayList<>(listWords);
+                checkedList = getEntityFromObservList();
 
             } else if (result.get() == buttonTypeTwo) {
 
                 selectFile();
-                checkedList = new ArrayList<>(listWords);
+                checkedList = getEntityFromObservList();
 
             }
         }
+    }
+
+    private void checkSaveListToFile(){
+
+        ButtonType buttonTypeOne = new ButtonType("Сохранить");
+        ButtonType buttonTypeTwo = new ButtonType("Отмена");
+
+        ArrayList<ButtonType> buttonList = new ArrayList<ButtonType>(){{add(buttonTypeOne);add(buttonTypeTwo);}};
+        Optional<ButtonType> result = alertWindow.alertSaveEdit(buttonList, "jhhk");
+
+        if (result.get() == buttonTypeOne){
+
+            try {
+                new ExcelParser().saveInExcel(fileChoose, listWords);
+            } catch (IOException e) {
+                alertWindow.alertErrorWriteToExcel();
+                e.printStackTrace();
+            }
+        }
+    }
+
+    private ArrayList<Words> getEntityFromObservList(){
+
+        ArrayList<Words> freeList = new ArrayList<>();
+
+        for (Words iterWords : listWords){
+
+            freeList.add(new Words(iterWords.getEnWord(), iterWords.getRuWord()));
+        }
+
+        return freeList;
+    }
+
+    private boolean equalsLists(ArrayList<Words> comparList){
+
+        for (int i = 0; i < comparList.size(); i++){
+
+
+
+            if (!listWords.get(i).getEnWord().equals(comparList.get(i).getEnWord()) &&
+                    !listWords.get(i).getRuWord().equals(comparList.get(i).getRuWord())){
+                return false;
+            }
+        }
+        return true;
     }
 
 
