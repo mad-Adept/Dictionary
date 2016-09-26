@@ -54,6 +54,19 @@ public class AlertWindow {
         alert.showAndWait();
     }
 
+
+    public void alertReadProperty(){
+
+        Alert alert = new Alert(Alert.AlertType.INFORMATION);
+        alert.setTitle("Alert Title");
+        alert.setHeaderText(null);
+        alert.setContentText("Ошибка загрузки форм глаголов!");
+        alert.setWidth(200);
+        alert.setHeight(200);
+        alert.showAndWait();
+        System.exit(0);
+    }
+
     public void alertErrorDelete(){
 
         Alert alert = new Alert(Alert.AlertType.ERROR);

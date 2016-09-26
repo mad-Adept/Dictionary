@@ -220,7 +220,7 @@ public class GuessController {
 
             } else if (result.get() == buttonTypeTwo) {
 
-                new MainController().selectFile();
+                new MainController().selectFile("read");
                 arreyListWords = new ArrayList<>(listWords);
 
             }

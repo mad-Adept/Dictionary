@@ -14,10 +14,10 @@
                   <AnchorPane prefHeight="557.0" prefWidth="779.0">
                      <children>
                         <WebView fx:id="webView_1" prefHeight="515.0" AnchorPane.bottomAnchor="46.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0" />
-                        <Button layoutX="728.0" layoutY="524.0" mnemonicParsing="false" text="Button" />
-                        <CheckBox layoutX="201.0" layoutY="529.0" mnemonicParsing="false" text="1 форма" />
-                        <CheckBox layoutX="345.0" layoutY="529.0" mnemonicParsing="false" text="2 форма" />
-                        <CheckBox layoutX="489.0" layoutY="529.0" mnemonicParsing="false" text="3 форма" />
+                        <Button layoutX="728.0" layoutY="524.0" mnemonicParsing="false" onAction="#button_50" text="Button" />
+                        <CheckBox fx:id="check_1_50" layoutX="201.0" layoutY="529.0" mnemonicParsing="false" text="1 форма" />
+                        <CheckBox fx:id="check_2_50" layoutX="345.0" layoutY="529.0" mnemonicParsing="false" text="2 форма" />
+                        <CheckBox fx:id="check_3_50" layoutX="489.0" layoutY="529.0" mnemonicParsing="false" text="3 форма" />
                      </children>
                   </AnchorPane>
                </content>

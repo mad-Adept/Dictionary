@@ -1,33 +1,40 @@
 package controller;
 
 
+import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
-import javafx.scene.web.WebEngine;
+import javafx.scene.Node;
+import javafx.scene.control.CheckBox;
 import javafx.scene.web.WebView;
+import javafx.stage.Stage;
+import utils.PropertyParser;
 
 
 public class IrregularVerbsController {
 
+    private PropertyParser propertyParser = new PropertyParser();
+
+
     @FXML
     private WebView webView_1;
-
     @FXML
     private WebView webView_2;
-
     @FXML
     private WebView webView_3;
-
     @FXML
     private WebView webView_4;
-
     @FXML
     private WebView webView_5;
-
     @FXML
     private WebView webView_6;
-
     @FXML
     private WebView webView_7;
+    @FXML
+    private CheckBox check_1_50;
+    @FXML
+    private CheckBox check_2_50;
+    @FXML
+    private CheckBox check_3_50;
 
     @FXML
     private void initialize() {
@@ -40,5 +47,25 @@ public class IrregularVerbsController {
         webView_6.getEngine().load(getClass().getClassLoader().getResource("html/366=99%.html").toExternalForm());
         webView_7.getEngine().load(getClass().getClassLoader().getResource("html/700=100%.html").toExternalForm());
 
+    }
+
+
+    public void button_50(ActionEvent actionEvent) {
+
+        if (check_1_50.isSelected()){
+            propertyParser.readProperty("property/100=70%/1 form.property");
+        }
+
+        if (check_2_50.isSelected()){
+            propertyParser.readProperty("property/100=70%/2 form.property");
+        }
+
+        if (check_3_50.isSelected()){
+            propertyParser.readProperty("property/100=70%/3 form.property");
+        }
+
+        Node source = (Node) actionEvent.getSource();
+        Stage stage = (Stage) source.getScene().getWindow();
+        stage.hide();
     }
 }
