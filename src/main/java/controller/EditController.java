@@ -7,6 +7,7 @@ import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.geometry.Pos;
+import javafx.scene.control.Button;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
 import javafx.scene.control.TextField;
@@ -42,6 +43,8 @@ public class EditController {
     private TextField textField1;
     @FXML
     private TextField textField2;
+    @FXML
+    private Button buttonSearch;
 
     @FXML
     private void initialize() {
@@ -106,7 +109,7 @@ public class EditController {
         if (!inputSearch.getText().trim().equals("")){
 
             list.clear();
-            searchList = searchCollacations(inputSearch.getText());
+            searchList = searchCollocations(inputSearch.getText());
             if (!searchList.isEmpty()) list.addAll(searchList);
             else tableWords.setPlaceholder(new Text("Net contenta"));
 
@@ -171,7 +174,7 @@ public class EditController {
         else return false;
     }
 
-    private ArrayList<Words> searchCollacations(String collacation){
+    private ArrayList<Words> searchCollocations(String collacation){
 
         ArrayList<Words> returnList = new ArrayList<>();
 
@@ -183,6 +186,13 @@ public class EditController {
         }
         return returnList;
     }
+
+    public void clearSearch(){
+
+        inputSearch.clear();
+        buttonSearch.fire();
+    }
+
 }
 
 

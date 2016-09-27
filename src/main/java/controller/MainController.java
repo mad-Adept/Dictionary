@@ -24,7 +24,6 @@ import utils.ExcelParser;
 import javax.swing.*;
 import javax.swing.filechooser.FileNameExtensionFilter;
 import java.io.File;
-import java.io.FileWriter;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Optional;
@@ -34,7 +33,6 @@ import java.util.StringTokenizer;
 
 public class MainController {
 
-    private File fileChoose;
     final Random random = new Random();
 
     static private ObservableList<Words> listWords = FXCollections.observableArrayList();
@@ -56,6 +54,7 @@ public class MainController {
     private boolean emptyFlag;
     private boolean dictionaryTranslateFlag = true;
     private ArrayList<Words> checkEditList;
+    private EditController editController;
 
     @FXML
     private AnchorPane root;
@@ -111,14 +110,14 @@ public class MainController {
         }
 
         if (mainButton.getText().equals("Start!")){
-            selectFile("read");
+            selectFile();
             checkedList = getEntityFromObservList();
             dictionaryButton.setDisable(false);
             guessButton.setDisable(false);
             editMenu.setDisable(false);
         }
 
-        checkChekedList();
+        checkCheckedList();
 
         if (mainButton.getText().equals("Next") || mainButton.getText().equals("Start!")) {
             inputWords.clear();
@@ -202,6 +201,7 @@ public class MainController {
         if (fxmlEdit == null) {
             fxmlLoaderEdit.setLocation(getClass().getResource("/views/EditWindow.fxml"));
             fxmlEdit = fxmlLoaderEdit.load();
+            editController = fxmlLoaderEdit.getController();
         }
 
             if (editDialogStage == null) {
@@ -230,6 +230,7 @@ public class MainController {
                 @Override
                 public void handle(WindowEvent event) {
 
+                    editController.clearSearch();
                     if (!equalsLists(checkEditList)){
                         checkSaveListToExcelFile();
                     }
@@ -248,28 +249,35 @@ public class MainController {
             fxmlIrregularVerbs = fxmlLoaderIrregularVerbs.load();
         }
 
-        if (irregularVerbsDialogStage==null) {
+        if (irregularVerbsDialogStage == null) {
             irregularVerbsDialogStage = new Stage();
             irregularVerbsDialogStage.setTitle("jgjhgjg");
             irregularVerbsDialogStage.setMinHeight(150);
             irregularVerbsDialogStage.setMinWidth(300);
             irregularVerbsDialogStage.setScene(new Scene(fxmlIrregularVerbs));
            // irregularVerbsDialogStage.initModality(Modality.WINDOW_MODAL);
-            irregularVerbsDialogStage.initOwner(mainStage);
+            //irregularVerbsDialogStage.initOwner(mainStage);
         }
 
         irregularVerbsDialogStage.show();
+        mainStage.hide();
 
         irregularVerbsDialogStage.setOnHidden(new EventHandler<WindowEvent>() {
             @Override
             public void handle(WindowEvent event) {
 
+
                 if(!equalsLists(checkEditList)){
 
                     checkedList = getEntityFromObservList();
-                    selectFile("write");
-
+                    mainButton.setText("Next");
+                    labelMessage.setText("Press \"Next\" to continue!");
+                    dictionaryButton.setDisable(false);
+                    guessButton.setDisable(false);
+                    editMenu.setDisable(false);
                 }
+
+                mainStage.show();
             }
         });
 
@@ -290,24 +298,15 @@ public class MainController {
     }
 
 
-    public void selectFile(String pick) {
+    public File selectFile() {
 
         FileNameExtensionFilter filter = new FileNameExtensionFilter("Excel", "xls", "xlsx");
-        JFileChooser fileChooser = new JFileChooser("C:\\Users\\Anton_Nikonov\\Desktop");
+        JFileChooser fileChooser = new JFileChooser("C:\\Users\\%UserName%\\Desktop");
         fileChooser.setFileFilter(filter);
+        File fileChoose = null;
 
-        if (pick.equals("write")) {
-            if (fileChooser.showSaveDialog(null) == JFileChooser.APPROVE_OPTION) {
 
-                try (FileWriter fw = new FileWriter(fileChooser.getSelectedFile())) {
-                    fw.write(String.valueOf(listWords));
-                } catch (IOException e) {
-                    System.out.println("Все погибло!");
-                }
-            }
-
-            if (pick.equals("read")) {
-                if (fileChooser.showDialog(null, "Open file") == JFileChooser.APPROVE_OPTION) {
+                if (fileChooser.showDialog(null, "Open/Save file") == JFileChooser.APPROVE_OPTION) {
                     try {
                         listWords.addAll(new ExcelParser().wordsMap(fileChooser.getSelectedFile()));
                         fileChoose = fileChooser.getSelectedFile();
@@ -317,9 +316,11 @@ public class MainController {
                         e.printStackTrace();
                     }
                 }
-            }
-        }
+
+                return fileChoose;
     }
+
+
 
     private Words randomValueMap(ArrayList<Words> list) {
 
@@ -330,7 +331,7 @@ public class MainController {
         return null;
     }
 
-    private void checkChekedList(){
+    private void checkCheckedList(){
 
         if (checkedList == null || checkedList.isEmpty()){
 
@@ -346,7 +347,7 @@ public class MainController {
 
             } else if (result.get() == buttonTypeTwo) {
 
-                selectFile("read");
+                selectFile();
                 checkedList = getEntityFromObservList();
 
             }
@@ -359,17 +360,19 @@ public class MainController {
         ButtonType buttonTypeTwo = new ButtonType("Отмена");
 
         ArrayList<ButtonType> buttonList = new ArrayList<ButtonType>(){{add(buttonTypeOne);add(buttonTypeTwo);}};
-        Optional<ButtonType> result = alertWindow.alertSaveEdit(buttonList, "jhhk");
 
-        if (result.get() == buttonTypeOne){
+            Optional<ButtonType> result = alertWindow.alertSaveEdit(buttonList, "Вы можете сохранить список слов," +
+                    " для последующего использования при старте программы.");
 
-            try {
-                new ExcelParser().saveInExcel(fileChoose, listWords);
-            } catch (IOException e) {
-                alertWindow.alertErrorWriteToExcel();
-                e.printStackTrace();
+            if (result.get() == buttonTypeOne) {
+
+                try {
+                    new ExcelParser().saveInExcel(selectFile(), listWords);
+                } catch (IOException e) {
+                    alertWindow.alertErrorWriteToExcel();
+                    e.printStackTrace();
+                }
             }
-        }
     }
 
     private ArrayList<Words> getEntityFromObservList(){
@@ -385,6 +388,11 @@ public class MainController {
     }
 
     private boolean equalsLists(ArrayList<Words> comparList){
+
+        if (comparList.isEmpty() && listWords.isEmpty()) return true;
+
+        else if (comparList.isEmpty()) return false;
+
 
         for (int i = 0; i < comparList.size(); i++){
 
