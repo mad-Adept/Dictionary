@@ -160,12 +160,12 @@ public class ExcelParser {
 
             if (cell == null) return false;
 
-            if (cell.toString().matches("^[A-Za-zА-Яа-я,; ]+$")) return true;
+            if (cell.toString().matches("^[A-Za-zА-Яа-я,;()/. ]+$")) return true;
             else return false;
         }
 
         private boolean checkEnglishWord(Cell cell){
-        if (cell.toString().matches("^[A-Za-z,; ]+$")) return true;
+        if (cell.toString().matches("^[A-Za-z,;()/. ]+$")) return true;
         else return false;
         }
 

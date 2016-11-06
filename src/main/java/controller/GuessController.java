@@ -116,9 +116,7 @@ public class GuessController {
     private Words randomValueMap(ObservableList<Words> list) {
 
         if (list != null && !list.isEmpty()) return list.get(random.nextInt(list.size()));
-        else {
-            alertWindow.alertErrorReadFiles();
-        }
+        else alertWindow.alertErrorReadFiles();
         return null;
     }
 

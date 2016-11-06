@@ -55,6 +55,7 @@ public class MainController {
     private boolean dictionaryTranslateFlag = true;
     private ArrayList<Words> checkEditList;
     private EditController editController;
+    private File fileChoose;
 
     @FXML
     private AnchorPane root;
@@ -116,8 +117,9 @@ public class MainController {
             guessButton.setDisable(false);
             editMenu.setDisable(false);
         }
-
-        checkCheckedList();
+        if (fileChoose != null) {
+            checkCheckedList();
+        }
 
         if (mainButton.getText().equals("Next") || mainButton.getText().equals("Start!")) {
             inputWords.clear();
@@ -303,21 +305,20 @@ public class MainController {
         FileNameExtensionFilter filter = new FileNameExtensionFilter("Excel", "xls", "xlsx");
         JFileChooser fileChooser = new JFileChooser("C:\\Users\\%UserName%\\Desktop");
         fileChooser.setFileFilter(filter);
-        File fileChoose = null;
+        fileChoose = null;
 
+        if (fileChooser.showDialog(null, "Open/Save file") == JFileChooser.APPROVE_OPTION) {
+            try {
+                listWords.addAll(new ExcelParser().wordsMap(fileChooser.getSelectedFile()));
+                fileChoose = fileChooser.getSelectedFile();
 
-                if (fileChooser.showDialog(null, "Open/Save file") == JFileChooser.APPROVE_OPTION) {
-                    try {
-                        listWords.addAll(new ExcelParser().wordsMap(fileChooser.getSelectedFile()));
-                        fileChoose = fileChooser.getSelectedFile();
+            } catch (Exception e) {
+                new AlertWindow().alertErrorReadFiles();
+                e.printStackTrace();
+            }
+        }
 
-                    } catch (Exception e) {
-                        new AlertWindow().alertErrorReadFiles();
-                        e.printStackTrace();
-                    }
-                }
-
-                return fileChoose;
+        return fileChoose;
     }
 
 
@@ -325,9 +326,6 @@ public class MainController {
     private Words randomValueMap(ArrayList<Words> list) {
 
         if (list != null && !list.isEmpty()) return list.get(random.nextInt(list.size()));
-        else {
-            alertWindow.alertErrorReadFiles();
-        }
         return null;
     }
 
