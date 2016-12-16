@@ -273,7 +273,7 @@ public class MainController {
 
                     checkedList = getEntityFromObservList();
                     mainButton.setText("Next");
-                    labelMessage.setText("Press \"Next\" to continue!");
+                    labelMessage.setText("Press=\"Next\" to continue!");
                     dictionaryButton.setDisable(false);
                     guessButton.setDisable(false);
                     editMenu.setDisable(false);
